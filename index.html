@@ -48,32 +48,9 @@
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 75%;
+            padding-top: 75%; /* 4:3比例 */
             overflow: hidden;
             background: #f8f9fa;
-        }
-        .thumbnail-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e0e0e0;
-            border-top: 4px solid #1890ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         .thumbnail-wrapper img {
             position: absolute;
@@ -84,12 +61,8 @@
             object-fit: cover;
             pointer-events: none;
             user-select: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
-        .thumbnail-wrapper img.loaded {
-            opacity: 1;
-        }
+        /* 透明覆盖层，阻止右键直接操作图片 */
         .thumbnail-wrapper::after {
             content: '';
             position: absolute;
@@ -99,6 +72,7 @@
             height: 100%;
             background: transparent;
             z-index: 2;
+            pointer-events: none;
         }
         .caption {
             padding: 15px;
@@ -107,6 +81,7 @@
             font-size: 0.9rem;
         }
 
+        /* 点击预览层 - 全局唯一，无图层冲突 */
         #preview-overlay {
             position: fixed;
             top: 0;
@@ -130,7 +105,7 @@
             border-radius: 8px;
             box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6);
             user-select: none;
-            pointer-events: none;
+            pointer-events: none; /* 点击图片不触发关闭 */
         }
         #preview-overlay.active {
             opacity: 1;
@@ -144,108 +119,86 @@
         <h1>陶然之狐 🦊</h1>
         <div class="gallery">
             <!-- 图片1 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a460569dd5b.webp">
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46596d931a.png">
                 <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a46595d74c0.png" alt="AUTUMN" onload="this.classList.add('loaded')">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a46596d931a.png" alt="陶然之狐">
+                </div>
+                <div class="caption">陶然之狐</div>
+            </div>
+            <!-- 图片2 -->
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a465974c401.png">
+                <div class="thumbnail-wrapper">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a465974c401.png" alt="陶然之狐">
+                </div>
+                <div class="caption">陶然之狐</div>
+            </div>
+            <!-- 图片3 -->
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a465952ff5d.png">
+                <div class="thumbnail-wrapper">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a465952ff5d.png" alt="AUTUMN">
                 </div>
                 <div class="caption">AUTUMN</div>
             </div>
-            
-            <!-- 图片2 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a460573ca87.webp">
-                <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a46595e7cfc.png" alt="头像" onload="this.classList.add('loaded')">
-                </div>
-                <div class="caption">头像</div>
-            </div>
-            
-            <!-- 图片3 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a460587402d.webp">
-                <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a465952ff5d.png" alt="秋日枫叶" onload="this.classList.add('loaded')">
-                </div>
-                <div class="caption">秋日枫叶</div>
-            </div>
-            
             <!-- 图片4 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a46058bab68.webp">
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4659b5828e.png">
                 <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a46596d931a.png" alt="2026新年快乐" onload="this.classList.add('loaded')">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a4659b5828e.png" alt="陶然之狐">
                 </div>
-                <div class="caption">2026新年快乐</div>
+                <div class="caption">陶然之狐</div>
             </div>
-            
             <!-- 图片5 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a4605953dd1.webp">
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46595d74c0.png">
                 <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a465974c401.png" alt="设定图" onload="this.classList.add('loaded')">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a46595d74c0.png" alt="陶然之狐">
                 </div>
-                <div class="caption">设定图</div>
+                <div class="caption">陶然之狐</div>
             </div>
-            
             <!-- 图片6 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a460679000c.webp">
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46595e7cfc.png">
                 <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a4659b5c7ee.png" alt="冬日雪地" onload="this.classList.add('loaded')">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a46595e7cfc.png" alt="陶然之狐">
                 </div>
-                <div class="caption">冬日雪地</div>
+                <div class="caption">陶然之狐</div>
             </div>
-            
             <!-- 图片7 -->
-            <div class="gallery-item" data-image="https://picui.ogmua.cn/s1/2026/03/01/69a4606927b0d.webp">
+            <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4659b5c7ee.png">
                 <div class="thumbnail-wrapper">
-                    <div class="thumbnail-loading">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <img src="https://free.picui.cn/free/2026/03/02/69a4659b5828e.png" alt="大头贴" onload="this.classList.add('loaded')">
+                    <img src="https://free.picui.cn/free/2026/03/02/69a4659b5c7ee.png" alt="陶然之狐">
                 </div>
-                <div class="caption">大头贴</div>
+                <div class="caption">陶然之狐</div>
             </div>
         </div>
     </div>
 
+    <!-- 全局预览层 -->
     <div id="preview-overlay">
         <img id="preview-image" src="" alt="完整预览图">
     </div>
 
     <script>
+        // 核心交互逻辑
         const galleryItems = document.querySelectorAll('.gallery-item');
         const previewOverlay = document.getElementById('preview-overlay');
         const previewImage = document.getElementById('preview-image');
         
+        // 点击缩略图显示完整图
         galleryItems.forEach(item => {
             item.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const imageSrc = this.getAttribute('data-image');
                 previewImage.src = imageSrc;
                 previewOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden'; // 禁止滚动
             });
         });
         
+        // 点击空白处关闭预览
         previewOverlay.addEventListener('click', function() {
             this.classList.remove('active');
-            document.body.style.overflow = '';
+            document.body.style.overflow = ''; // 恢复滚动
         });
         
+        // ESC键关闭预览
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
                 previewOverlay.classList.remove('active');
@@ -253,25 +206,15 @@
             }
         });
 
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
-
+        // 防右键/复制/开发者工具
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
         document.addEventListener('keydown', function(e) {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
             }
         });
     </script>
 </body>
 </html>
-
