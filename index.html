@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陶然之狐 - 画廊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #1890ff;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer; /* 点击光标样式 */
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 75%; /* 4:3 比例缩略图 */
+            overflow: hidden;
+        }
+        .thumbnail-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+        }
+        /* 覆盖层阻止右键 */
+        .thumbnail-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 1;
+        }
+        .caption {
+            padding: 15px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 点击式预览层 - 全局唯一 */
+        #preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            cursor: pointer; /* 点击空白处可关闭 */
+        }
+        #preview-image {
+            max-width: 95vw;
+            max-height: 95vh;
+            border: 8px solid white;
+            border-radius: 8px;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6);
+            user-select: none;
+            pointer-events: none; /* 防止点击图片触发关闭 */
+        }
+        #preview-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto; /* 激活后可点击关闭 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>陶然之狐 🦊</h1>
+        <div class="gallery">
+            <!-- 图片1 -->
+            <div class="gallery-item" data-image="1.png">
+                <div class="thumbnail-wrapper">
+                    <img src="1.png" alt="AUTUMN">
+                </div>
+                <div class="caption">AUTUMN</div>
+            </div>
+            
+            <!-- 图片2 -->
+            <div class="gallery-item" data-image="2.png">
+                <div class="thumbnail-wrapper">
+                    <img src="2.png" alt="头像">
+                </div>
+                <div class="caption">头像</div>
+            </div>
+            
+            <!-- 图片3 -->
+            <div class="gallery-item" data-image="3.png">
+                <div class="thumbnail-wrapper">
+                    <img src="3.png" alt="秋日枫叶">
+                </div>
+                <div class="caption">秋日枫叶</div>
+            </div>
+            
+            <!-- 图片4 -->
+            <div class="gallery-item" data-image="4.png">
+                <div class="thumbnail-wrapper">
+                    <img src="4.png" alt="2026新年快乐">
+                </div>
+                <div class="caption">2026新年快乐</div>
+            </div>
+            
+            <!-- 图片5 -->
+            <div class="gallery-item" data-image="5.png">
+                <div class="thumbnail-wrapper">
+                    <img src="5.png" alt="设定图">
+                </div>
+                <div class="caption">设定图</div>
+            </div>
+            
+            <!-- 图片6 -->
+            <div class="gallery-item" data-image="6.png">
+                <div class="thumbnail-wrapper">
+                    <img src="6.png" alt="冬日雪地">
+                </div>
+                <div class="caption">冬日雪地</div>
+            </div>
+            
+            <!-- 图片7 -->
+            <div class="gallery-item" data-image="7.png">
+                <div class="thumbnail-wrapper">
+                    <img src="7.png" alt="大头贴">
+                </div>
+                <div class="caption">大头贴</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局预览层 -->
+    <div id="preview-overlay">
+        <img id="preview-image" src="" alt="完整预览图">
+    </div>
+
+    <script>
+        // 获取元素
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const previewOverlay = document.getElementById('preview-overlay');
+        const previewImage = document.getElementById('preview-image');
+        
+        // 点击缩略图 - 显示对应完整图片
+        galleryItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation(); // 阻止事件冒泡到body
+                const imageSrc = this.getAttribute('data-image');
+                previewImage.src = imageSrc;
+                previewOverlay.classList.add('active');
+                // 禁止页面滚动
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // 点击预览层（空白处）- 关闭预览
+        previewOverlay.addEventListener('click', function() {
+            this.classList.remove('active');
+            // 恢复页面滚动
+            document.body.style.overflow = '';
+        });
+        
+        // 按ESC键也可关闭预览
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
+                previewOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // 禁止右键菜单
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 禁止选择和复制
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // 禁止F12、Ctrl+Shift+I、Ctrl+U等开发者工具快捷键
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
