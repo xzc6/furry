@@ -79,14 +79,28 @@
             z-index: 10;
             pointer-events: auto;
         }
-        /* 视频卡片样式（支持全屏） */
+        /* 视频卡片样式（支持双击全屏） */
         .video-wrapper {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9视频比例 */
             overflow: hidden;
-            /* 允许视频容器触发全屏 */
             contain: layout style;
+        }
+        /* 视频下方画师名称链接样式 */
+        .video-author-link {
+            display: block;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #1890ff;
+            text-decoration: none;
+            background-color: #f8f9fa;
+            transition: background-color 0.2s ease;
+        }
+        .video-author-link:hover {
+            background-color: #e9ecef;
+            color: #096dd9;
         }
         /* 画师名称样式（通用） */
         .artist-name {
@@ -250,7 +264,7 @@
             </div>
         </div>
 
-        <!-- 视频作品集板块（支持全屏） -->
+        <!-- 视频作品集板块（双击全屏+下方可跳转链接） -->
         <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 - 视频作品集 🎬</a></h1>
         <div class="gallery">
             <!-- 你的指定视频：BV1spFZzXE8A -->
@@ -258,6 +272,7 @@
                 <div class="artist-name">陶然之狐</div>
                 <div class="video-wrapper">
                     <iframe 
+                        id="bili-player"
                         src="//player.bilibili.com/player.html?bvid=BV1spFZzXE8A&page=1&danmaku=0&high_quality=1&as_wide=1&disable_portrait=1&autoplay=false&allowfullscreen=1"
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                         scrolling="no" 
@@ -269,6 +284,10 @@
                         webkitallowfullscreen="true"
                     ></iframe>
                 </div>
+                <!-- 视频下方画师名称链接，点击跳转B站主页 -->
+                <a href="https://space.bilibili.com/3546955395369420" target="_blank" class="video-author-link">
+                    陶然之狐（UID: 3546955395369420）
+                </a>
             </div>
         </div>
     </div>
@@ -293,7 +312,38 @@
             }
         }
 
-        // 2. 页面初始化
+        // 2. 双击视频全屏功能
+        function setupDoubleClickFullscreen() {
+            const videoWrapper = document.querySelector('.video-wrapper');
+            const iframe = document.getElementById('bili-player');
+
+            if (videoWrapper && iframe) {
+                videoWrapper.addEventListener('dblclick', function(e) {
+                    e.preventDefault(); // 防止双击选中文字
+                    if (!document.fullscreenElement) {
+                        // 进入全屏
+                        if (iframe.requestFullscreen) {
+                            iframe.requestFullscreen();
+                        } else if (iframe.webkitRequestFullscreen) { /* Safari */
+                            iframe.webkitRequestFullscreen();
+                        } else if (iframe.msRequestFullscreen) { /* IE11 */
+                            iframe.msRequestFullscreen();
+                        }
+                    } else {
+                        // 退出全屏
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) { /* Safari */
+                            document.webkitExitFullscreen();
+                        } else if (document.msExitFullscreen) { /* IE11 */
+                            document.msExitFullscreen();
+                        }
+                    }
+                });
+            }
+        }
+
+        // 3. 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
             const galleryItems = document.querySelectorAll('.gallery-item');
             const previewOverlay = document.getElementById('preview-overlay');
@@ -316,7 +366,10 @@
                 }
             });
 
-            // 3. 预览层关闭逻辑
+            // 初始化双击全屏功能
+            setupDoubleClickFullscreen();
+
+            // 4. 预览层关闭逻辑
             previewOverlay.addEventListener('click', function(e) {
                 if (e.target === previewOverlay || e.target === previewContainer) {
                     this.classList.remove('active');
@@ -337,7 +390,7 @@
                 }
             });
 
-            // 4. 移动端触摸缩放与拖动逻辑
+            // 5. 移动端触摸缩放与拖动逻辑
             let isDragging = false;
             let startX, startY;
             let imgX = 0, imgY = 0;
@@ -398,7 +451,7 @@
                 }
             });
 
-            // 5. 基础防护
+            // 6. 基础防护
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('selectstart', e => e.preventDefault());
             window.addEventListener('beforeprint', function(e) {
