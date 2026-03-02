@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>陶然之狐 - 画廊</title>
     <style>
         * {
@@ -13,7 +13,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
-            padding: 20px;
+            padding: 15px; /* 减小移动端内边距 */
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -21,47 +21,45 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        /* 标题链接样式：无下划线 + 新标签页打开 */
+        /* 标题链接样式 */
         h1 a {
             text-decoration: none;
             color: #1890ff;
         }
         h1 a:hover {
-            text-decoration: none;
             color: #096dd9;
         }
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
+            margin-bottom: 20px; /* 移动端减小间距 */
+            font-size: 2rem; /* 适配移动端字体 */
         }
-        /* 画廊网格布局 */
+        /* 画廊网格：移动端适配 */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* 移动端显示两列 */
+            gap: 10px; /* 减小移动端间距 */
         }
         .gallery-item {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px; /* 移动端减小圆角 */
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
             position: relative;
             cursor: pointer;
         }
         .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
         }
-        /* 图片容器：用背景图替代img标签，禁止看图模式 */
+        /* 核心防看图模式结构 */
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 75%; /* 4:3比例 */
+            padding-top: 75%;
             overflow: hidden;
-            background: #f8f9fa;
         }
+        /* 背景图承载图片，浏览器不识别为图片元素 */
         .thumbnail-bg {
             position: absolute;
             top: 0;
@@ -70,86 +68,85 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            pointer-events: none;
-            user-select: none;
         }
-        /* 画师名称悬浮提示 */
-        .artist-name {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1rem;
-            z-index: 3;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .gallery-item:hover .artist-name {
-            opacity: 1;
-        }
-        /* 透明覆盖层：阻止右键直接操作图片 */
-        .thumbnail-wrapper::after {
-            content: '';
+        /* 关键：顶层透明遮罩，彻底阻断浏览器对图片的识别 */
+        .anti-sniff-mask {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: transparent;
-            z-index: 2;
+            z-index: 10; /* 置于最顶层 */
+            pointer-events: auto; /* 接收点击事件 */
+        }
+        /* 画师名称：移动端适配 */
+        .artist-name {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.2s ease;
             pointer-events: none;
         }
-        /* 图片预览层 */
+        .gallery-item:hover .artist-name {
+            opacity: 1;
+        }
+        /* 预览层：支持触摸缩放拖动 */
         #preview-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        #preview-container {
+            position: relative;
+            width: 95vw;
+            height: 95vh;
+            overflow: hidden;
         }
         #preview-image {
-            max-width: 95vw;
-            max-height: 95vh;
-            width: auto;
-            height: auto;
-            border: 8px solid white;
-            border-radius: 8px;
-            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6);
-            user-select: none;
-            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
+            transition: transform 0.1s ease;
         }
         #preview-overlay.active {
             opacity: 1;
             visibility: visible;
-            pointer-events: auto;
         }
-        /* 防打印/导出PDF：打印时仅显示版权提示 */
+        /* 防打印样式 */
         @media print {
             body * {
                 visibility: hidden !important;
             }
             body::before {
-                content: "该页面受版权保护，不允许打印/导出PDF！" !important;
+                content: "该页面受版权保护，禁止打印！" !important;
                 visibility: visible !important;
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 28px;
+                font-size: 24px;
                 color: #ff4d4f;
                 font-weight: bold;
                 text-align: center;
@@ -162,11 +159,12 @@
     <div class="container">
         <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 🔥</a></h1>
         <div class="gallery">
-            <!-- 图片1：Base64加密链接 + 完整画师信息 -->
+            <!-- 图片1 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NmQ5MzFhLnBuZw==">
                 <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div> <!-- 防嗅探遮罩 -->
                 </div>
             </div>
             <!-- 图片2 -->
@@ -174,6 +172,7 @@
                 <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片3 -->
@@ -181,6 +180,7 @@
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片4 -->
@@ -188,6 +188,7 @@
                 <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片5 -->
@@ -195,6 +196,7 @@
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片6 -->
@@ -202,6 +204,7 @@
                 <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片7 -->
@@ -209,6 +212,7 @@
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片8 -->
@@ -216,6 +220,7 @@
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片9 -->
@@ -223,6 +228,7 @@
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片10 -->
@@ -230,21 +236,24 @@
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 图片预览层 -->
+    <!-- 预览层（支持触摸缩放） -->
     <div id="preview-overlay">
-        <img id="preview-image" src="" alt="完整预览图">
+        <div id="preview-container">
+            <img id="preview-image" src="" alt="预览图">
+        </div>
     </div>
 
     <script>
-        // 1. Base64解密工具函数
+        // 1. Base64解密函数
         function decodeBase64(str) {
             try {
-                return decodeURIComponent(atob(str).split('').map(function(c) {
+                return decodeURIComponent(atob(str).split('').map(c => {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
             } catch (e) {
@@ -253,94 +262,127 @@
             }
         }
 
-        // 2. 页面加载核心逻辑：解密链接 + 设置背景图 + 绑定预览事件
+        // 2. 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
             const galleryItems = document.querySelectorAll('.gallery-item');
             const previewOverlay = document.getElementById('preview-overlay');
             const previewImage = document.getElementById('preview-image');
+            const previewContainer = document.getElementById('preview-container');
 
-            // 遍历所有图片项
+            // 初始化图片
             galleryItems.forEach(item => {
-                // 解密Base64编码的图片链接
-                const encryptedUrl = item.getAttribute('data-image');
-                const decryptedUrl = decodeBase64(encryptedUrl);
+                const decryptedUrl = decodeBase64(item.getAttribute('data-image'));
+                item.querySelector('.thumbnail-bg').style.backgroundImage = `url(${decryptedUrl})`;
                 
-                // 设置背景图（替代img标签，禁止看图模式）
-                const bgElement = item.querySelector('.thumbnail-bg');
-                bgElement.style.backgroundImage = `url(${decryptedUrl})`;
-
-                // 绑定点击预览事件
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                // 点击事件（绑定在遮罩上，确保触发）
+                item.querySelector('.anti-sniff-mask').addEventListener('click', function() {
                     previewImage.src = decryptedUrl;
+                    // 重置缩放和位置
+                    previewImage.style.transform = 'translate(-50%, -50%) scale(1)';
                     previewOverlay.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 });
-
-                // 阻止图片卡片上的触摸行为，防止看图模式，但不影响页面滚动
-                item.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                }, { passive: false });
             });
 
-            // 移除全局的touchstart拦截，恢复页面滚动
-            // document.addEventListener('touchstart', function(e) {
-            //     if (e.target.closest('.thumbnail-wrapper')) {
-            //         e.preventDefault();
-            //     }
-            // }, { passive: false });
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.thumbnail-wrapper')) {
+            // 3. 预览层关闭逻辑
+            previewOverlay.addEventListener('click', function(e) {
+                if (e.target === previewOverlay || e.target === previewContainer) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // ESC键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
+                    previewOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+
+                // 快捷键防护
+                if ((e.ctrlKey && e.key === 'p') || (e.ctrlKey && e.key === 's') || e.key === 'F12') {
                     e.preventDefault();
                 }
             });
-        });
 
-        // 3. 预览层关闭逻辑
-        const previewOverlay = document.getElementById('preview-overlay');
-        previewOverlay.addEventListener('click', function() {
-            this.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-        // ESC键关闭预览
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
-                previewOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+            // 4. 移动端触摸缩放与拖动逻辑
+            let isDragging = false;
+            let startX, startY;
+            let imgX = 0, imgY = 0;
+            let scale = 1;
+            let prevScale = 1;
+            let touchDistance = 0;
+
+            // 计算两点距离
+            function getTouchDistance(touches) {
+                const x = touches[0].clientX - touches[1].clientX;
+                const y = touches[0].clientY - touches[1].clientY;
+                return Math.sqrt(x * x + y * y);
             }
 
-            // 4. 防操作：拦截打印/保存/开发者工具快捷键
-            const forbiddenKeys = [
-                (e.ctrlKey && e.key === 'p'),    // Ctrl+P 打印
-                (e.ctrlKey && e.key === 's'),    // Ctrl+S 保存
-                (e.ctrlKey && e.shiftKey && e.key === 'S'), // Ctrl+Shift+S 另存为
-                e.key === 'F12',                 // F12 开发者工具
-                (e.ctrlKey && e.shiftKey && e.key === 'I'),// Ctrl+Shift+I 开发者工具
-                (e.ctrlKey && e.shiftKey && e.key === 'J'),// Ctrl+Shift+J 控制台
-                (e.ctrlKey && e.key === 'U')     // Ctrl+U 查看源码
-            ];
-            if (forbiddenKeys.some(Boolean)) {
+            // 计算两点中点
+            function getTouchCenter(touches) {
+                return {
+                    x: (touches[0].clientX + touches[1].clientX) / 2,
+                    y: (touches[0].clientY + touches[1].clientY) / 2
+                };
+            }
+
+            previewContainer.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    // 单指拖动
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                } else if (e.touches.length === 2) {
+                    // 双指缩放
+                    touchDistance = getTouchDistance(e.touches);
+                    prevScale = scale;
+                }
+                e.stopPropagation();
+            });
+
+            previewContainer.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 1 && isDragging && scale > 1) {
+                    // 单指拖动（仅缩放后允许）
+                    const dx = e.touches[0].clientX - startX;
+                    const dy = e.touches[0].clientY - startY;
+                    imgX += dx;
+                    imgY += dy;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    
+                    // 应用位置
+                    previewImage.style.transform = `translate(-50%, -50%) translate(${imgX}px, ${imgY}px) scale(${scale})`;
+                } else if (e.touches.length === 2) {
+                    // 双指缩放
+                    const newDistance = getTouchDistance(e.touches);
+                    scale = prevScale * (newDistance / touchDistance);
+                    // 限制缩放范围
+                    scale = Math.max(1, Math.min(3, scale));
+                    
+                    // 应用缩放
+                    previewImage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                }
+                e.stopPropagation();
+            });
+
+            previewContainer.addEventListener('touchend', function() {
+                isDragging = false;
+                if (scale <= 1) {
+                    // 重置位置
+                    imgX = 0;
+                    imgY = 0;
+                }
+            });
+
+            // 5. 基础防护（保留核心，不影响滚动）
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('selectstart', e => e.preventDefault());
+            window.addEventListener('beforeprint', function(e) {
                 e.preventDefault();
-                alert('该页面受版权保护，禁止此类操作！');
-            }
-        });
-
-        // 5. 防右键菜单
-        document.addEventListener('contextmenu', e => {
-            e.preventDefault();
-            alert('该页面受版权保护，禁止右键操作！');
-        });
-
-        // 6. 防文本选择/复制
-        document.addEventListener('selectstart', e => e.preventDefault());
-
-        // 7. 防打印/导出PDF
-        window.addEventListener('beforeprint', function(e) {
-            e.preventDefault();
-            alert('该页面受版权保护，不允许打印/导出PDF！');
-            window.print = function() {
-                alert('该页面受版权保护，不允许打印/导出PDF！');
-            };
+                window.print = function() {};
+            });
         });
     </script>
 </body>
