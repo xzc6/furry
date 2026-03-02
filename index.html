@@ -21,14 +21,14 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        /* 核心修改：去除h1中a标签的下划线 */
+        /* 去除a标签下划线 + 统一颜色 */
         h1 a {
-            text-decoration: none; /* 强制去除下划线 */
-            color: #1890ff; /* 保持原字体颜色 */
+            text-decoration: none; /* 无下划线 */
+            color: #1890ff; /* 原标题颜色 */
         }
-        /* 可选：鼠标悬停时仍无下划线（如需hover变色可添加color属性） */
         h1 a:hover {
-            text-decoration: none; /* 确保hover时也没有下划线 */
+            text-decoration: none; /* hover时也无下划线 */
+            color: #096dd9; /* 可选：hover时颜色稍深，提升交互感 */
         }
         h1 {
             text-align: center;
@@ -136,7 +136,8 @@
 </head>
 <body>
     <div class="container">
-        <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0">陶然之狐 🔥</a></h1>
+        <!-- 核心修改：添加 target="_blank" 实现新标签页打开 -->
+        <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 🔥</a></h1>
         <div class="gallery">
             <!-- 图片1 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46596d931a.png">
