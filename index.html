@@ -39,7 +39,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 10px;
-            margin-bottom: 40px; /* 图片和视频板块间距 */
+            margin-bottom: 40px;
         }
         .gallery-item {
             background: white;
@@ -79,12 +79,14 @@
             z-index: 10;
             pointer-events: auto;
         }
-        /* 视频卡片样式（与图片统一） */
+        /* 视频卡片样式（支持全屏） */
         .video-wrapper {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9视频比例 */
             overflow: hidden;
+            /* 允许视频容器触发全屏 */
+            contain: layout style;
         }
         /* 画师名称样式（通用） */
         .artist-name {
@@ -248,25 +250,27 @@
             </div>
         </div>
 
-        <!-- 视频作品集板块（新增） -->
-<h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 - 视频作品集 🎬</a></h1>
-<div class="gallery">
-    <!-- 你的指定视频：BV1spFZzXE8A -->
-    <div class="gallery-item">
-        <div class="artist-name">陶然之狐</div>
-        <div class="video-wrapper">
-            <iframe 
-                src="//player.bilibili.com/player.html?bvid=BV1spFZzXE8A&page=1&danmaku=0&high_quality=1&as_wide=1&disable_portrait=1&autoplay=false"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                scrolling="no" 
-                border="0" 
-                frameborder="no" 
-                allowfullscreen="true"
-                allow="autoplay; fullscreen"
-            ></iframe>
+        <!-- 视频作品集板块（支持全屏） -->
+        <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 - 视频作品集 🎬</a></h1>
+        <div class="gallery">
+            <!-- 你的指定视频：BV1spFZzXE8A -->
+            <div class="gallery-item">
+                <div class="artist-name">陶然之狐</div>
+                <div class="video-wrapper">
+                    <iframe 
+                        src="//player.bilibili.com/player.html?bvid=BV1spFZzXE8A&page=1&danmaku=0&high_quality=1&as_wide=1&disable_portrait=1&autoplay=false&allowfullscreen=1"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                        scrolling="no" 
+                        border="0" 
+                        frameborder="no" 
+                        allowfullscreen="true"
+                        allow="autoplay; fullscreen; picture-in-picture"
+                        mozallowfullscreen="true"
+                        webkitallowfullscreen="true"
+                    ></iframe>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
 
     <!-- 图片预览层 -->
