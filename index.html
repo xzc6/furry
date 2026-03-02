@@ -123,11 +123,14 @@
         #preview-image {
             max-width: 95vw;
             max-height: 95vh;
+            width: auto;
+            height: auto;
             border: 8px solid white;
             border-radius: 8px;
             box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6);
             user-select: none;
             pointer-events: none;
+            object-fit: contain;
         }
         #preview-overlay.active {
             opacity: 1;
@@ -273,14 +276,19 @@
                     previewOverlay.classList.add('active');
                     document.body.style.overflow = 'hidden';
                 });
+
+                // 阻止图片卡片上的触摸行为，防止看图模式，但不影响页面滚动
+                item.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                }, { passive: false });
             });
 
-            // 阻止长按/点击触发浏览器看图模式
-            document.addEventListener('touchstart', function(e) {
-                if (e.target.closest('.thumbnail-wrapper')) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
+            // 移除全局的touchstart拦截，恢复页面滚动
+            // document.addEventListener('touchstart', function(e) {
+            //     if (e.target.closest('.thumbnail-wrapper')) {
+            //         e.preventDefault();
+            //     }
+            // }, { passive: false });
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.thumbnail-wrapper')) {
                     e.preventDefault();
