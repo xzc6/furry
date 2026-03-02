@@ -28,7 +28,7 @@
         }
         h1 a:hover {
             text-decoration: none; /* hover时也无下划线 */
-            color: #096dd9; /* 可选：hover时颜色稍深，提升交互感 */
+            color: #096dd9; /* hover时颜色稍深 */
         }
         h1 {
             text-align: center;
@@ -132,79 +132,99 @@
             visibility: visible;
             pointer-events: auto;
         }
+
+        /* 核心防护：阻止打印/导出PDF */
+        @media print {
+            body * {
+                visibility: hidden !important; /* 打印时隐藏所有内容 */
+            }
+            body::before {
+                content: "该页面受版权保护，不允许打印/导出PDF！" !important;
+                visibility: visible !important;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 28px;
+                color: #ff4d4f;
+                font-weight: bold;
+                text-align: center;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 核心修改：添加 target="_blank" 实现新标签页打开 -->
+        <!-- 标题链接新标签页打开 + 无下划线 -->
         <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 🔥</a></h1>
         <div class="gallery">
             <!-- 图片1 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46596d931a.png">
-                <div class="artist-name">画师：卷起狂风的蝴蝶（兽聚汇）</div>
+                <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a46596d931a.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片2 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a465974c401.png">
-                <div class="artist-name">画师：元瑜y（B站号：3546917709548296）</div>
+                <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a465974c401.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片3 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a465952ff5d.png">
-                <div class="artist-name">画师：依语雨鱼（qq：168918984）</div>
+                <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a465952ff5d.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片4 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4659b5828e.png">
-                <div class="artist-name">画师：元瑜y（B站号：3546917709548296）</div>
+                <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a4659b5828e.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片5 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46595d74c0.png">
-                <div class="artist-name">画师：依语雨鱼（qq：168918984）</div>
+                <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a46595d74c0.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片6 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a46595e7cfc.png">
-                <div class="artist-name">画师：卷起狂风的蝴蝶（兽聚汇）</div>
+                <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a46595e7cfc.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片7 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4659b5c7ee.png">
-                <div class="artist-name">画师：依语雨鱼（qq：168918984）</div>
+                <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a4659b5c7ee.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片8 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4f41e999d3.png">
-                <div class="artist-name">画师：安慰不会安慰（兽聚汇）</div>
+                <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a4f41e999d3.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片9 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4f41e7f738.png">
-                <div class="artist-name">画师：安慰不会安慰（兽聚汇）</div>
+                <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a4f41e7f738.png" alt="陶然之狐">
                 </div>
             </div>
             <!-- 图片10 -->
             <div class="gallery-item" data-image="https://free.picui.cn/free/2026/03/02/69a4f41e1b830.png">
-                <div class="artist-name">画师：安慰不会安慰（兽聚汇）</div>
+                <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <img src="https://free.picui.cn/free/2026/03/02/69a4f41e1b830.png" alt="陶然之狐">
                 </div>
@@ -243,16 +263,41 @@
                 previewOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }
+
+            // 防护1：拦截打印/保存/另存为快捷键
+            if (
+                // Ctrl+P(打印)、Ctrl+S(保存)、Ctrl+Shift+S(另存为)
+                (e.ctrlKey && e.key === 'p') ||
+                (e.ctrlKey && e.key === 's') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'S') ||
+                // 防开发者工具：F12、Ctrl+Shift+I/J、Ctrl+U
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+                alert('该页面受版权保护，禁止此类操作！'); // 可选提示
+            }
         });
 
-        // 防右键/复制/开发者工具
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        // 防护2：阻止右键菜单
+        document.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            alert('该页面受版权保护，禁止右键操作！'); // 可选提示
+        });
+
+        // 防护3：阻止文本选择/复制
         document.addEventListener('selectstart', e => e.preventDefault());
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-                (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
+
+        // 防护4：检测并阻止打印行为
+        window.addEventListener('beforeprint', function(e) {
+            e.preventDefault();
+            alert('该页面受版权保护，不允许打印/导出PDF！');
+            // 覆盖print方法，彻底禁用打印
+            window.print = function() {
+                alert('该页面受版权保护，不允许打印/导出PDF！');
+            };
         });
     </script>
 </body>
