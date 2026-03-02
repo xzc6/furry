@@ -13,7 +13,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
-            padding: 15px; /* 减小移动端内边距 */
+            padding: 15px;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -31,18 +31,19 @@
         }
         h1 {
             text-align: center;
-            margin-bottom: 20px; /* 移动端减小间距 */
-            font-size: 2rem; /* 适配移动端字体 */
+            margin-bottom: 20px;
+            font-size: 2rem;
         }
         /* 画廊网格：移动端适配 */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* 移动端显示两列 */
-            gap: 10px; /* 减小移动端间距 */
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 40px; /* 图片和视频板块间距 */
         }
         .gallery-item {
             background: white;
-            border-radius: 8px; /* 移动端减小圆角 */
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.2s ease;
@@ -52,14 +53,13 @@
         .gallery-item:hover {
             transform: translateY(-3px);
         }
-        /* 核心防看图模式结构 */
+        /* 图片卡片样式 */
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
             padding-top: 75%;
             overflow: hidden;
         }
-        /* 背景图承载图片，浏览器不识别为图片元素 */
         .thumbnail-bg {
             position: absolute;
             top: 0;
@@ -69,7 +69,6 @@
             background-size: cover;
             background-position: center;
         }
-        /* 关键：顶层透明遮罩，彻底阻断浏览器对图片的识别 */
         .anti-sniff-mask {
             position: absolute;
             top: 0;
@@ -77,10 +76,17 @@
             width: 100%;
             height: 100%;
             background: transparent;
-            z-index: 10; /* 置于最顶层 */
-            pointer-events: auto; /* 接收点击事件 */
+            z-index: 10;
+            pointer-events: auto;
         }
-        /* 画师名称：移动端适配 */
+        /* 视频卡片样式（与图片统一） */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9视频比例 */
+            overflow: hidden;
+        }
+        /* 画师名称样式（通用） */
         .artist-name {
             position: absolute;
             top: 8px;
@@ -98,7 +104,7 @@
         .gallery-item:hover .artist-name {
             opacity: 1;
         }
-        /* 预览层：支持触摸缩放拖动 */
+        /* 图片预览层 */
         #preview-overlay {
             position: fixed;
             top: 0;
@@ -157,14 +163,15 @@
 </head>
 <body>
     <div class="container">
-        <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 🔥</a></h1>
+        <!-- 图片画廊板块 -->
+        <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 - 图片作品集 🔥</a></h1>
         <div class="gallery">
             <!-- 图片1 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NmQ5MzFhLnBuZw==">
                 <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
                     <div class="thumbnail-bg"></div>
-                    <div class="anti-sniff-mask"></div> <!-- 防嗅探遮罩 -->
+                    <div class="anti-sniff-mask"></div>
                 </div>
             </div>
             <!-- 图片2 -->
@@ -240,9 +247,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- 视频作品集板块（新增） -->
+<h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 - 视频作品集 🎬</a></h1>
+<div class="gallery">
+    <!-- 你的指定视频：BV1spFZzXE8A -->
+    <div class="gallery-item">
+        <div class="artist-name">陶然之狐</div>
+        <div class="video-wrapper">
+            <iframe 
+                src="//player.bilibili.com/player.html?bvid=BV1spFZzXE8A&page=1&danmaku=0&high_quality=1&as_wide=1&disable_portrait=1&autoplay=false"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                scrolling="no" 
+                border="0" 
+                frameborder="no" 
+                allowfullscreen="true"
+                allow="autoplay; fullscreen"
+            ></iframe>
+        </div>
+    </div>
+</div>
     </div>
 
-    <!-- 预览层（支持触摸缩放） -->
+    <!-- 图片预览层 -->
     <div id="preview-overlay">
         <div id="preview-container">
             <img id="preview-image" src="" alt="预览图">
@@ -271,17 +298,18 @@
 
             // 初始化图片
             galleryItems.forEach(item => {
-                const decryptedUrl = decodeBase64(item.getAttribute('data-image'));
-                item.querySelector('.thumbnail-bg').style.backgroundImage = `url(${decryptedUrl})`;
-                
-                // 点击事件（绑定在遮罩上，确保触发）
-                item.querySelector('.anti-sniff-mask').addEventListener('click', function() {
-                    previewImage.src = decryptedUrl;
-                    // 重置缩放和位置
-                    previewImage.style.transform = 'translate(-50%, -50%) scale(1)';
-                    previewOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
+                if (item.hasAttribute('data-image')) {
+                    const decryptedUrl = decodeBase64(item.getAttribute('data-image'));
+                    item.querySelector('.thumbnail-bg').style.backgroundImage = `url(${decryptedUrl})`;
+                    
+                    // 图片点击预览
+                    item.querySelector('.anti-sniff-mask').addEventListener('click', function() {
+                        previewImage.src = decryptedUrl;
+                        previewImage.style.transform = 'translate(-50%, -50%) scale(1)';
+                        previewOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    });
+                }
             });
 
             // 3. 预览层关闭逻辑
@@ -313,14 +341,12 @@
             let prevScale = 1;
             let touchDistance = 0;
 
-            // 计算两点距离
             function getTouchDistance(touches) {
                 const x = touches[0].clientX - touches[1].clientX;
                 const y = touches[0].clientY - touches[1].clientY;
                 return Math.sqrt(x * x + y * y);
             }
 
-            // 计算两点中点
             function getTouchCenter(touches) {
                 return {
                     x: (touches[0].clientX + touches[1].clientX) / 2,
@@ -330,12 +356,10 @@
 
             previewContainer.addEventListener('touchstart', function(e) {
                 if (e.touches.length === 1) {
-                    // 单指拖动
                     isDragging = true;
                     startX = e.touches[0].clientX;
                     startY = e.touches[0].clientY;
                 } else if (e.touches.length === 2) {
-                    // 双指缩放
                     touchDistance = getTouchDistance(e.touches);
                     prevScale = scale;
                 }
@@ -344,7 +368,6 @@
 
             previewContainer.addEventListener('touchmove', function(e) {
                 if (e.touches.length === 1 && isDragging && scale > 1) {
-                    // 单指拖动（仅缩放后允许）
                     const dx = e.touches[0].clientX - startX;
                     const dy = e.touches[0].clientY - startY;
                     imgX += dx;
@@ -352,16 +375,12 @@
                     startX = e.touches[0].clientX;
                     startY = e.touches[0].clientY;
                     
-                    // 应用位置
                     previewImage.style.transform = `translate(-50%, -50%) translate(${imgX}px, ${imgY}px) scale(${scale})`;
                 } else if (e.touches.length === 2) {
-                    // 双指缩放
                     const newDistance = getTouchDistance(e.touches);
                     scale = prevScale * (newDistance / touchDistance);
-                    // 限制缩放范围
                     scale = Math.max(1, Math.min(3, scale));
                     
-                    // 应用缩放
                     previewImage.style.transform = `translate(-50%, -50%) scale(${scale})`;
                 }
                 e.stopPropagation();
@@ -370,13 +389,12 @@
             previewContainer.addEventListener('touchend', function() {
                 isDragging = false;
                 if (scale <= 1) {
-                    // 重置位置
                     imgX = 0;
                     imgY = 0;
                 }
             });
 
-            // 5. 基础防护（保留核心，不影响滚动）
+            // 5. 基础防护
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('selectstart', e => e.preventDefault());
             window.addEventListener('beforeprint', function(e) {
