@@ -21,20 +21,21 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        /* 去除a标签下划线 + 统一颜色 */
+        /* 标题链接样式：无下划线 + 新标签页打开 */
         h1 a {
-            text-decoration: none; /* 无下划线 */
-            color: #1890ff; /* 原标题颜色 */
+            text-decoration: none;
+            color: #1890ff;
         }
         h1 a:hover {
-            text-decoration: none; /* hover时也无下划线 */
-            color: #096dd9; /* hover时颜色稍深 */
+            text-decoration: none;
+            color: #096dd9;
         }
         h1 {
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.5rem;
         }
+        /* 画廊网格布局 */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -53,6 +54,7 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
+        /* 图片容器：用背景图替代img标签，禁止看图模式 */
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
@@ -60,13 +62,14 @@
             overflow: hidden;
             background: #f8f9fa;
         }
-        .thumbnail-wrapper img {
+        .thumbnail-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background-size: cover;
+            background-position: center;
             pointer-events: none;
             user-select: none;
         }
@@ -88,7 +91,7 @@
         .gallery-item:hover .artist-name {
             opacity: 1;
         }
-        /* 透明覆盖层，阻止右键直接操作图片 */
+        /* 透明覆盖层：阻止右键直接操作图片 */
         .thumbnail-wrapper::after {
             content: '';
             position: absolute;
@@ -100,8 +103,7 @@
             z-index: 2;
             pointer-events: none;
         }
-
-        /* 点击预览层 - 全局唯一 */
+        /* 图片预览层 */
         #preview-overlay {
             position: fixed;
             top: 0;
@@ -132,11 +134,10 @@
             visibility: visible;
             pointer-events: auto;
         }
-
-        /* 核心防护：阻止打印/导出PDF */
+        /* 防打印/导出PDF：打印时仅显示版权提示 */
         @media print {
             body * {
-                visibility: hidden !important; /* 打印时隐藏所有内容 */
+                visibility: hidden !important;
             }
             body::before {
                 content: "该页面受版权保护，不允许打印/导出PDF！" !important;
@@ -156,92 +157,90 @@
 </head>
 <body>
     <div class="container">
-        <!-- 标题链接新标签页打开 + 无下划线 -->
         <h1><a href="https://space.bilibili.com/3632301443385666?spm_id_from=333.1007.0.0" target="_blank">陶然之狐 🔥</a></h1>
         <div class="gallery">
-            <!-- 图片1（链接已Base64加密） -->
+            <!-- 图片1：Base64加密链接 + 完整画师信息 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NmQ5MzFhLnBuZw==">
                 <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NmQ5MzFhLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片2（链接已Base64加密） -->
+            <!-- 图片2 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NzRjNDAxLnBuZw==">
                 <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NzRjNDAxLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片3（链接已Base64加密） -->
+            <!-- 图片3 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NTJmZjVkLnBuZw==">
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NTJmZjVkLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片4（链接已Base64加密） -->
+            <!-- 图片4 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5YjU4MjhlLnBuZw==">
                 <div class="artist-name">元瑜y（B站：3546917709548296）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5YjU4MjhlLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片5（链接已Base64加密） -->
+            <!-- 图片5 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NWQ3NGMwLnBuZw==">
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NWQ3NGMwLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片6（链接已Base64加密） -->
+            <!-- 图片6 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NWU3Y2ZjLnBuZw==">
                 <div class="artist-name">卷起狂风的蝴蝶（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5NWU3Y2ZjLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片7（链接已Base64加密） -->
+            <!-- 图片7 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5YjVjN2VlLnBuZw==">
                 <div class="artist-name">依语雨鱼（QQ：168918984）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0NjU5YjVjN2VlLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片8（链接已Base64加密） -->
+            <!-- 图片8 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTk5OWQzLnBuZw==">
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTk5OWQzLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片9（链接已Base64加密） -->
+            <!-- 图片9 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTdmNzM4LnBuZw==">
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTdmNzM4LnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
-            <!-- 图片10（链接已Base64加密） -->
+            <!-- 图片10 -->
             <div class="gallery-item" data-image="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTFiODMwLnBuZw==">
                 <div class="artist-name">安慰不会安慰（兽聚汇）</div>
                 <div class="thumbnail-wrapper">
-                    <img data-src="aHR0cHM6Ly9mcmVlLnBpY3VpLmNuL2ZyZWUvMjAyNi8wMy8wMi82OWE0ZjQxZTFiODMwLnBuZw==" alt="陶然之狐">
+                    <div class="thumbnail-bg"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 全局预览层 -->
+    <!-- 图片预览层 -->
     <div id="preview-overlay">
         <img id="preview-image" src="" alt="完整预览图">
     </div>
 
     <script>
-        // 核心工具函数：Base64解密（适配浏览器原生API）
+        // 1. Base64解密工具函数
         function decodeBase64(str) {
             try {
-                // 浏览器原生Base64解码
                 return decodeURIComponent(atob(str).split('').map(function(c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
@@ -251,82 +250,86 @@
             }
         }
 
-        // 页面加载时解密所有图片链接并赋值
+        // 2. 页面加载核心逻辑：解密链接 + 设置背景图 + 绑定预览事件
         document.addEventListener('DOMContentLoaded', function() {
-            // 解密缩略图链接
-            const thumbnailImgs = document.querySelectorAll('img[data-src]');
-            thumbnailImgs.forEach(img => {
-                const encryptedSrc = img.getAttribute('data-src');
-                const decryptedSrc = decodeBase64(encryptedSrc);
-                img.src = decryptedSrc; // 赋值真实链接
-            });
-
-            // 解密预览用的data-image链接（替换原有值）
             const galleryItems = document.querySelectorAll('.gallery-item');
+            const previewOverlay = document.getElementById('preview-overlay');
+            const previewImage = document.getElementById('preview-image');
+
+            // 遍历所有图片项
             galleryItems.forEach(item => {
-                const encryptedImage = item.getAttribute('data-image');
-                const decryptedImage = decodeBase64(encryptedImage);
-                item.setAttribute('data-image', decryptedImage);
+                // 解密Base64编码的图片链接
+                const encryptedUrl = item.getAttribute('data-image');
+                const decryptedUrl = decodeBase64(encryptedUrl);
+                
+                // 设置背景图（替代img标签，禁止看图模式）
+                const bgElement = item.querySelector('.thumbnail-bg');
+                bgElement.style.backgroundImage = `url(${decryptedUrl})`;
+
+                // 绑定点击预览事件
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    previewImage.src = decryptedUrl;
+                    previewOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            // 阻止长按/点击触发浏览器看图模式
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.closest('.thumbnail-wrapper')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.thumbnail-wrapper')) {
+                    e.preventDefault();
+                }
             });
         });
 
-        // 核心交互逻辑（无修改）
-        const galleryItems = document.querySelectorAll('.gallery-item');
+        // 3. 预览层关闭逻辑
         const previewOverlay = document.getElementById('preview-overlay');
-        const previewImage = document.getElementById('preview-image');
-        
-        galleryItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const imageSrc = this.getAttribute('data-image');
-                previewImage.src = imageSrc;
-                previewOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-        
         previewOverlay.addEventListener('click', function() {
             this.classList.remove('active');
             document.body.style.overflow = '';
         });
-        
+        // ESC键关闭预览
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && previewOverlay.classList.contains('active')) {
                 previewOverlay.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
-            // 防护1：拦截打印/保存/另存为快捷键
-            if (
-                // Ctrl+P(打印)、Ctrl+S(保存)、Ctrl+Shift+S(另存为)
-                (e.ctrlKey && e.key === 'p') ||
-                (e.ctrlKey && e.key === 's') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'S') ||
-                // 防开发者工具：F12、Ctrl+Shift+I/J、Ctrl+U
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
+            // 4. 防操作：拦截打印/保存/开发者工具快捷键
+            const forbiddenKeys = [
+                (e.ctrlKey && e.key === 'p'),    // Ctrl+P 打印
+                (e.ctrlKey && e.key === 's'),    // Ctrl+S 保存
+                (e.ctrlKey && e.shiftKey && e.key === 'S'), // Ctrl+Shift+S 另存为
+                e.key === 'F12',                 // F12 开发者工具
+                (e.ctrlKey && e.shiftKey && e.key === 'I'),// Ctrl+Shift+I 开发者工具
+                (e.ctrlKey && e.shiftKey && e.key === 'J'),// Ctrl+Shift+J 控制台
+                (e.ctrlKey && e.key === 'U')     // Ctrl+U 查看源码
+            ];
+            if (forbiddenKeys.some(Boolean)) {
                 e.preventDefault();
-                alert('该页面受版权保护，禁止此类操作！'); // 可选提示
+                alert('该页面受版权保护，禁止此类操作！');
             }
         });
 
-        // 防护2：阻止右键菜单
+        // 5. 防右键菜单
         document.addEventListener('contextmenu', e => {
             e.preventDefault();
-            alert('该页面受版权保护，禁止右键操作！'); // 可选提示
+            alert('该页面受版权保护，禁止右键操作！');
         });
 
-        // 防护3：阻止文本选择/复制
+        // 6. 防文本选择/复制
         document.addEventListener('selectstart', e => e.preventDefault());
 
-        // 防护4：检测并阻止打印行为
+        // 7. 防打印/导出PDF
         window.addEventListener('beforeprint', function(e) {
             e.preventDefault();
             alert('该页面受版权保护，不允许打印/导出PDF！');
-            // 覆盖print方法，彻底禁用打印
             window.print = function() {
                 alert('该页面受版权保护，不允许打印/导出PDF！');
             };
